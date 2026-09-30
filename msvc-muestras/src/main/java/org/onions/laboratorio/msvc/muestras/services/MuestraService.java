@@ -1,0 +1,26 @@
+package org.onions.laboratorio.msvc.muestras.services;
+
+import org.onions.laboratorio.msvc.muestras.models.entity.Muestra;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface MuestraService {
+
+    List<Muestra> listar();
+
+    Optional<Muestra> porId(Long id);
+
+    List<Muestra> porDetalleOrden(Long idDetalleOrden);
+
+    //Crea una nueva muestra a partir de un detalle de orden
+    Muestra registrarMuestra(Muestra muestra);
+
+    Optional<Muestra> recibirMuestra(Long id);
+
+    Optional<Muestra> marcarProcesada(Long id);
+
+    Optional<Muestra> actualizar(Long id, Muestra muestra);
+
+    void eliminar(Long id);
+}

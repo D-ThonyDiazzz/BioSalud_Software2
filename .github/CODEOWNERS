@@ -1,0 +1,10 @@
+# Reemplaza @usuario-N por el usuario de GitHub de cada integrante.
+# Cada agregado (carpeta msvc-x/) tiene UN solo dueno: GitHub le pedira revision en los Pull Requests.
+
+/msvc-ordenesatencion/   @usuario-1
+/msvc-pacientes/         @usuario-2
+/msvc-perfiles/          @usuario-3
+/msvc-responsables/      @usuario-4
+/msvc-muestras/          @usuario-4
+/msvc-analisis/          @usuario-5
+/msvc-resultados/        @usuario-5
