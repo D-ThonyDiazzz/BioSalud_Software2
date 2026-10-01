@@ -1,47 +1,36 @@
-package org.onions.laboratorio.msvc.responsables.models.entity;
+package org.onions.laboratorio.msvc.responsables.domain.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import org.onions.laboratorio.msvc.responsables.models.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.responsables.models.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.responsables.models.vo.Telefono;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.CorreoElectronico;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.DocumentoIdentidad;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.Telefono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//Agregado (raiz): Responsable.
-//Es un agregado independiente porque un mismo responsable puede estar
-//vinculado a varios pacientes distintos a lo largo del tiempo.
-@Entity
-@Table(name = "responsables")
 public class Responsable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Embedded
     private DocumentoIdentidad documentoIdentidad;
-
-    @NotEmpty
     private String nombre;
-
-    @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
-
     private String sexo;
-
-    @Embedded
     private Telefono telefono;
-
-    @Embedded
     private CorreoElectronico correoElectronico;
-
-    @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
     public Responsable() {
         this.fechaRegistro = LocalDateTime.now();
+    }
+
+    public Responsable(Long id, DocumentoIdentidad documentoIdentidad, String nombre, LocalDate fechaNacimiento, String sexo, Telefono telefono, CorreoElectronico correoElectronico, LocalDateTime fechaRegistro) {
+        this.id = id;
+        this.documentoIdentidad = documentoIdentidad;
+        this.nombre = nombre;
+        this.fechaNacimiento = fechaNacimiento;
+        this.sexo = sexo;
+        this.telefono = telefono;
+        this.correoElectronico = correoElectronico;
+        this.fechaRegistro = fechaRegistro;
     }
 
     public Long getId() { return id; }
