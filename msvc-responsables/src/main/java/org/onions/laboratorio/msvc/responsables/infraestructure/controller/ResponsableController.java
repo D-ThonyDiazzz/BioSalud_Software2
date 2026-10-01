@@ -1,8 +1,8 @@
-package org.onions.laboratorio.msvc.responsables.controllers;
+package org.onions.laboratorio.msvc.responsables.infraestructure.controller;
 
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.responsables.models.entity.Responsable;
-import org.onions.laboratorio.msvc.responsables.services.ResponsableService;
+import org.onions.laboratorio.msvc.responsables.domain.model.Responsable;
+import org.onions.laboratorio.msvc.responsables.application.service.ResponsableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

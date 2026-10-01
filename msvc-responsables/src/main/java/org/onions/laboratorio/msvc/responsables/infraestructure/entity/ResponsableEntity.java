@@ -1,10 +1,10 @@
-package org.onions.laboratorio.msvc.responsables.models.entity;
+package org.onions.laboratorio.msvc.responsables.infraestructure.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import org.onions.laboratorio.msvc.responsables.models.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.responsables.models.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.responsables.models.vo.Telefono;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.CorreoElectronico;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.DocumentoIdentidad;
+import org.onions.laboratorio.msvc.responsables.domain.model.vo.Telefono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 //vinculado a varios pacientes distintos a lo largo del tiempo.
 @Entity
 @Table(name = "responsables")
-public class Responsable {
+public class ResponsableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Responsable {
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
-    public Responsable() {
+    public ResponsableEntity() {
         this.fechaRegistro = LocalDateTime.now();
     }
 
