@@ -1,6 +1,6 @@
-package org.onions.laboratorio.msvc.muestras.services;
+package org.onions.laboratorio.msvc.muestras.application.service;
 
-import org.onions.laboratorio.msvc.muestras.models.entity.Muestra;
+import org.onions.laboratorio.msvc.muestras.domain.model.Muestra;
 
 import java.util.List;
 import java.util.Optional;

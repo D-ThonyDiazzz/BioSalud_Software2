@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.muestras.models;
+package org.onions.laboratorio.msvc.muestras.infrastructure.client.model;
 
 import java.math.BigDecimal;
 

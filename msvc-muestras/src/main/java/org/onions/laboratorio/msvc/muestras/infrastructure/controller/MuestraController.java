@@ -1,9 +1,9 @@
-package org.onions.laboratorio.msvc.muestras.controllers;
+package org.onions.laboratorio.msvc.muestras.infrastructure.controller;
 
 import feign.FeignException;
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.muestras.models.entity.Muestra;
-import org.onions.laboratorio.msvc.muestras.services.MuestraService;
+import org.onions.laboratorio.msvc.muestras.domain.model.Muestra;
+import org.onions.laboratorio.msvc.muestras.application.service.MuestraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
