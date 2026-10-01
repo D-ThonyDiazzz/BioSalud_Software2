@@ -1,10 +1,10 @@
-package org.onions.laboratorio.msvc.muestras.models.vo;
+package org.onions.laboratorio.msvc.muestras.infrastructure.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class MedioBiologico {
+public class MedioBiologicoEmbeddable {
 
     @Column(name = "medio_tipo")
     private String tipoMedio;
@@ -12,9 +12,9 @@ public class MedioBiologico {
     @Column(name = "medio_contenedor")
     private String contenedorRequerido;
 
-    public MedioBiologico() {}
+    public MedioBiologicoEmbeddable() {}
 
-    public MedioBiologico(String tipoMedio, String contenedorRequerido) {
+    public MedioBiologicoEmbeddable(String tipoMedio, String contenedorRequerido) {
         this.tipoMedio = tipoMedio;
         this.contenedorRequerido = contenedorRequerido;
     }

@@ -1,6 +1,6 @@
-package org.onions.laboratorio.msvc.muestras.client;
+package org.onions.laboratorio.msvc.muestras.infrastructure.client;
 
-import org.onions.laboratorio.msvc.muestras.models.OrdenAtencion;
+import org.onions.laboratorio.msvc.muestras.infrastructure.client.model.OrdenAtencion;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
