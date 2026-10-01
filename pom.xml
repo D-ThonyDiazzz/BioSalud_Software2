@@ -16,7 +16,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <!-- Solo microservicios del CORE (un modulo por agregado) -->
     <modules>
         <module>msvc-pacientes</module>
         <module>msvc-responsables</module>
