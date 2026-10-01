@@ -40,7 +40,3 @@ Para desplegar el ecosistema en un entorno local, se requiere:
 3. Configurar las siguientes variables de entorno para la conexión a las bases de datos:
    * `DB_USERNAME` (ej. root)
    * `DB_PASSWORD` (clave del motor local)
-
-**Comando de ejecución por módulo:**
-```bash
-mvn -pl <nombre-del-microservicio> spring-boot:run
