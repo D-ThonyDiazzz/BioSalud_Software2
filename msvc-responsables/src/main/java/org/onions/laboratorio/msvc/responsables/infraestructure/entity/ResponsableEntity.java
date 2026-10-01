@@ -2,10 +2,6 @@ package org.onions.laboratorio.msvc.responsables.infraestructure.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.Telefono;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,7 +17,7 @@ public class ResponsableEntity {
     private Long id;
 
     @Embedded
-    private DocumentoIdentidad documentoIdentidad;
+    private DocumentoIdentidadEmbeddable documentoIdentidad;
 
     @NotEmpty
     private String nombre;
@@ -32,10 +28,10 @@ public class ResponsableEntity {
     private String sexo;
 
     @Embedded
-    private Telefono telefono;
+    private TelefonoEmbeddable telefono;
 
     @Embedded
-    private CorreoElectronico correoElectronico;
+    private CorreoElectronicoEmbeddable correoElectronico;
 
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
@@ -46,18 +42,25 @@ public class ResponsableEntity {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public DocumentoIdentidad getDocumentoIdentidad() { return documentoIdentidad; }
-    public void setDocumentoIdentidad(DocumentoIdentidad documentoIdentidad) { this.documentoIdentidad = documentoIdentidad; }
+
+    public DocumentoIdentidadEmbeddable getDocumentoIdentidad() { return documentoIdentidad; }
+    public void setDocumentoIdentidad(DocumentoIdentidadEmbeddable documentoIdentidad) { this.documentoIdentidad = documentoIdentidad; }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
+
     public LocalDate getFechaNacimiento() { return fechaNacimiento; }
     public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
     public String getSexo() { return sexo; }
     public void setSexo(String sexo) { this.sexo = sexo; }
-    public Telefono getTelefono() { return telefono; }
-    public void setTelefono(Telefono telefono) { this.telefono = telefono; }
-    public CorreoElectronico getCorreoElectronico() { return correoElectronico; }
-    public void setCorreoElectronico(CorreoElectronico correoElectronico) { this.correoElectronico = correoElectronico; }
+
+    public TelefonoEmbeddable getTelefono() { return telefono; }
+    public void setTelefono(TelefonoEmbeddable telefono) { this.telefono = telefono; }
+
+    public CorreoElectronicoEmbeddable getCorreoElectronico() { return correoElectronico; }
+    public void setCorreoElectronico(CorreoElectronicoEmbeddable correoElectronico) { this.correoElectronico = correoElectronico; }
+
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 }

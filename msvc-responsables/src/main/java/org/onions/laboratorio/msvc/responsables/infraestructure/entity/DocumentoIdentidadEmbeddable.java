@@ -1,13 +1,20 @@
-package org.onions.laboratorio.msvc.responsables.domain.model.vo;
+package org.onions.laboratorio.msvc.responsables.infraestructure.entity;
 
-public class DocumentoIdentidad {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
+public class DocumentoIdentidadEmbeddable {
+
+    @Column(name = "tipo_documento")
     private String tipoDocumento;
+
+    @Column(name = "numero_documento")
     private String numeroDocumento;
 
-    public DocumentoIdentidad() {}
+    public DocumentoIdentidadEmbeddable() {}
 
-    public DocumentoIdentidad(String tipoDocumento, String numeroDocumento) {
+    public DocumentoIdentidadEmbeddable(String tipoDocumento, String numeroDocumento) {
         this.tipoDocumento = tipoDocumento;
         this.numeroDocumento = numeroDocumento;
     }

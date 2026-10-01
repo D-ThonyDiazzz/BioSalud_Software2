@@ -1,11 +1,18 @@
-package org.onions.laboratorio.msvc.responsables.domain.model.vo;
+package org.onions.laboratorio.msvc.responsables.infraestructure.entity;
 
-public class Telefono {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
+public class TelefonoEmbeddable {
+
+    @Column(name = "tel_prefijo")
     private String prefijo;
+
+    @Column(name = "tel_numero")
     private String numeroTelefono;
 
-    public Telefono() {}
+    public TelefonoEmbeddable() {}
 
     public String getPrefijo() { return prefijo; }
     public void setPrefijo(String prefijo) { this.prefijo = prefijo; }
