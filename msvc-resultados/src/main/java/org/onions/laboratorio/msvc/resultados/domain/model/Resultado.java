@@ -1,58 +1,49 @@
-package org.onions.laboratorio.msvc.resultados.models.entity;
-
-import jakarta.persistence.*;
+package org.onions.laboratorio.msvc.resultados.domain.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-//Agregado (raiz): Resultado.
-//Representa cada determinacion obtenida a partir del procesamiento manual de una Muestra.
-//Mantiene su propio flujo de estados (PENDIENTE, OBSERVADO, VALIDADO) hasta la firma tecnica del bioquimico.
-//Referencia a Muestra SOLO por identificador. El parametro analitico se guarda como datos propios del resultado.
-@Entity
-@Table(name = "resultados")
+/** Agregado raiz de una determinacion obtenida a partir de una muestra. */
 public class Resultado {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    //Referencias externas
-    @Column(name = "id_muestra", nullable = false)
     private Long idMuestra;
-
-    //Datos del parametro medido (propios del Resultado, sin depender de otro microservicio)
-    @Column(name = "nombre_parametro", nullable = false)
     private String nombreParametro;
-
     private String unidad;
-
-    @Column(name = "rango_referencia")
     private String rangoReferencia;
-
-    @Column(name = "valor_obtenido")
     private BigDecimal valorObtenido;
-
-    //PENDIENTE, OBSERVADO, VALIDADO
     private String estado;
-
-    @Column(name = "fecha_validacion")
     private LocalDateTime fechaValidacion;
-
-    @Column(name = "firmado_por")
     private String firmadoPor;
-
     private String interpretacion;
 
     public Resultado() {
         this.estado = "PENDIENTE";
     }
 
+    public Resultado(Long id, Long idMuestra, String nombreParametro, String unidad,
+                     String rangoReferencia, BigDecimal valorObtenido, String estado,
+                     LocalDateTime fechaValidacion, String firmadoPor, String interpretacion) {
+        this.id = id;
+        this.idMuestra = idMuestra;
+        this.nombreParametro = nombreParametro;
+        this.unidad = unidad;
+        this.rangoReferencia = rangoReferencia;
+        this.valorObtenido = valorObtenido;
+        this.estado = estado;
+        this.fechaValidacion = fechaValidacion;
+        this.firmadoPor = firmadoPor;
+        this.interpretacion = interpretacion;
+    }
+
     public boolean estaValidado() {
-        return "VALIDADO".equalsIgnoreCase(this.estado);
+        return "VALIDADO".equalsIgnoreCase(estado);
     }
 
     public void marcarValidado(String bioquimico) {
+        if (bioquimico == null || bioquimico.isBlank()) {
+            throw new IllegalArgumentException("El bioquimico que valida el resultado es obligatorio");
+        }
         this.estado = "VALIDADO";
         this.firmadoPor = bioquimico;
         this.fechaValidacion = LocalDateTime.now();
@@ -60,6 +51,8 @@ public class Resultado {
 
     public void marcarObservado() {
         this.estado = "OBSERVADO";
+        this.fechaValidacion = null;
+        this.firmadoPor = null;
     }
 
     public Long getId() { return id; }
@@ -72,8 +65,6 @@ public class Resultado {
     public void setUnidad(String unidad) { this.unidad = unidad; }
     public String getRangoReferencia() { return rangoReferencia; }
     public void setRangoReferencia(String rangoReferencia) { this.rangoReferencia = rangoReferencia; }
-    public String getInterpretacion() { return interpretacion; }
-    public void setInterpretacion(String interpretacion) { this.interpretacion = interpretacion; }
     public BigDecimal getValorObtenido() { return valorObtenido; }
     public void setValorObtenido(BigDecimal valorObtenido) { this.valorObtenido = valorObtenido; }
     public String getEstado() { return estado; }
@@ -82,4 +73,6 @@ public class Resultado {
     public void setFechaValidacion(LocalDateTime fechaValidacion) { this.fechaValidacion = fechaValidacion; }
     public String getFirmadoPor() { return firmadoPor; }
     public void setFirmadoPor(String firmadoPor) { this.firmadoPor = firmadoPor; }
+    public String getInterpretacion() { return interpretacion; }
+    public void setInterpretacion(String interpretacion) { this.interpretacion = interpretacion; }
 }
