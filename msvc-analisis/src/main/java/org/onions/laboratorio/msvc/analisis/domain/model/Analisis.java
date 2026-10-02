@@ -1,43 +1,21 @@
-package org.onions.laboratorio.msvc.analisis.models.entity;
+package org.onions.laboratorio.msvc.analisis.domain.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import org.onions.laboratorio.msvc.analisis.models.vo.CondicionesPrevias;
-import org.onions.laboratorio.msvc.analisis.models.vo.MedioBiologico;
+import org.onions.laboratorio.msvc.analisis.domain.model.vo.CondicionesPrevias;
+import org.onions.laboratorio.msvc.analisis.domain.model.vo.MedioBiologico;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-//Agregado (raiz): Analisis.
-//Cada analisis es una entrada de catalogo con su propia tarifa, condiciones y medio.
-//Regla del Negocio: solo los analisis "vigentes" pueden ofrecerse a los pacientes.
-@Entity
-@Table(name = "analisis")
+/** Agregado raiz del catalogo de analisis. No depende de Spring ni de JPA. */
 public class Analisis {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotEmpty
-    @Column(name = "nombre_analisis")
     private String nombreAnalisis;
-
-    @Column(length = 500)
     private String descripcion;
-
     private BigDecimal precio;
-
-    @Embedded
     private MedioBiologico medioBiologico;
-
-    @Embedded
     private CondicionesPrevias condicionesPrevias;
-
-    //VIGENTE / NO_VIGENTE
     private String estado;
-
-    @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
     public Analisis() {
@@ -45,12 +23,29 @@ public class Analisis {
         this.fechaRegistro = LocalDateTime.now();
     }
 
+    public Analisis(Long id, String nombreAnalisis, String descripcion, BigDecimal precio,
+                    MedioBiologico medioBiologico, CondicionesPrevias condicionesPrevias,
+                    String estado, LocalDateTime fechaRegistro) {
+        this.id = id;
+        this.nombreAnalisis = nombreAnalisis;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.medioBiologico = medioBiologico;
+        this.condicionesPrevias = condicionesPrevias;
+        this.estado = estado;
+        this.fechaRegistro = fechaRegistro;
+    }
+
     public boolean estaVigente() {
-        return "VIGENTE".equalsIgnoreCase(this.estado);
+        return "VIGENTE".equalsIgnoreCase(estado);
     }
 
     public boolean requiereAyunoEspecial() {
         return condicionesPrevias != null && condicionesPrevias.requiereAyunoEspecial();
+    }
+
+    public void darDeBaja() {
+        this.estado = "NO_VIGENTE";
     }
 
     public Long getId() { return id; }

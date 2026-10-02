@@ -1,17 +1,9 @@
-package org.onions.laboratorio.msvc.analisis.models.vo;
+package org.onions.laboratorio.msvc.analisis.domain.model.vo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
-@Embeddable
+/** Tipo de muestra corporal y contenedor requerido para procesarla. */
 public class MedioBiologico {
 
-    //sangre, orina, heces, hisopado, esputo, etc.
-    @Column(name = "medio_tipo")
     private String tipoMedio;
-
-    //contenedor requerido para el medio biologico
-    @Column(name = "medio_contenedor")
     private String contenedorRequerido;
 
     public MedioBiologico() {}
