@@ -1,13 +1,11 @@
-package org.onions.laboratorio.msvc.resultados.models;
+package org.onions.laboratorio.msvc.resultados.infrastructure.client.model;
 
-public class Muestra {
+public class MuestraResponse {
 
     private Long id;
     private Long idDetalleOrden;
     private String codigoRotulado;
     private String estado;
-
-    public Muestra() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
