@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.perfiles.models;
+package org.onions.laboratorio.msvc.perfiles.domain;
 
 import java.math.BigDecimal;
 

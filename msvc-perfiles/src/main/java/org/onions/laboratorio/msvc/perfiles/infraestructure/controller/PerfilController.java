@@ -1,9 +1,9 @@
-package org.onions.laboratorio.msvc.perfiles.controllers;
+package org.onions.laboratorio.msvc.perfiles.infraestructure.controller;
 
 import feign.FeignException;
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.perfiles.models.entity.Perfil;
-import org.onions.laboratorio.msvc.perfiles.services.PerfilService;
+import org.onions.laboratorio.msvc.perfiles.domain.model.Perfil;
+import org.onions.laboratorio.msvc.perfiles.application.service.PerfilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +49,8 @@ public class PerfilController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@Valid @RequestBody Perfil perfil,
-                                    @PathVariable Long id, BindingResult result) {
+    public ResponseEntity<?> editar(@Valid @RequestBody Perfil perfil, BindingResult result,
+                                    @PathVariable Long id) {
         if (result.hasErrors()) return validar(result);
         Optional<Perfil> op = service.actualizar(id, perfil);
         if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());

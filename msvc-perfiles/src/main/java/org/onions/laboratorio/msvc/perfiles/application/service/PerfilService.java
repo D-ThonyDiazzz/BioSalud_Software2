@@ -1,6 +1,6 @@
-package org.onions.laboratorio.msvc.perfiles.services;
+package org.onions.laboratorio.msvc.perfiles.application.service;
 
-import org.onions.laboratorio.msvc.perfiles.models.entity.Perfil;
+import org.onions.laboratorio.msvc.perfiles.domain.model.Perfil;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,10 +1,10 @@
-package org.onions.laboratorio.msvc.perfiles.services;
+package org.onions.laboratorio.msvc.perfiles.application.service;
 
-import org.onions.laboratorio.msvc.perfiles.client.AnalisisClientRest;
-import org.onions.laboratorio.msvc.perfiles.models.Analisis;
-import org.onions.laboratorio.msvc.perfiles.models.entity.Perfil;
-import org.onions.laboratorio.msvc.perfiles.models.entity.PerfilAnalisis;
-import org.onions.laboratorio.msvc.perfiles.repositories.PerfilRepository;
+import org.onions.laboratorio.msvc.perfiles.application.port.AnalisisClientPort;
+import org.onions.laboratorio.msvc.perfiles.application.port.PerfilRepositoryPort;
+import org.onions.laboratorio.msvc.perfiles.domain.Analisis;
+import org.onions.laboratorio.msvc.perfiles.domain.model.Perfil;
+import org.onions.laboratorio.msvc.perfiles.domain.model.PerfilAnalisis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,39 +17,39 @@ import java.util.stream.Collectors;
 public class PerfilServiceImpl implements PerfilService {
 
     @Autowired
-    private PerfilRepository repository;
+    private PerfilRepositoryPort repository;
 
     @Autowired
-    private AnalisisClientRest analisisClient;
+    private AnalisisClientPort analisisClient;
 
     @Override
     @Transactional(readOnly = true)
     public List<Perfil> listar() {
-        return (List<Perfil>) repository.findAll();
+        return repository.listar();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Perfil> porId(Long id) {
-        return repository.findById(id);
+        return repository.porId(id);
     }
 
     @Override
     @Transactional
     public Perfil guardar(Perfil perfil) {
-        return repository.save(perfil);
+        return repository.guardar(perfil);
     }
 
     @Override
     @Transactional
     public Optional<Perfil> actualizar(Long id, Perfil datos) {
-        Optional<Perfil> op = repository.findById(id);
+        Optional<Perfil> op = repository.porId(id);
         if (op.isPresent()) {
             Perfil actual = op.get();
             if (datos.getNombre() != null) actual.setNombre(datos.getNombre());
             if (datos.getDescripcion() != null) actual.setDescripcion(datos.getDescripcion());
             if (datos.getCodigoPerfil() != null) actual.setCodigoPerfil(datos.getCodigoPerfil());
-            return Optional.of(repository.save(actual));
+            return Optional.of(repository.guardar(actual));
         }
         return Optional.empty();
     }
@@ -57,24 +57,23 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional
     public void eliminar(Long id) {
-        repository.deleteById(id);
+        repository.eliminar(id);
     }
 
     @Override
     @Transactional
     public Optional<Perfil> asignarAnalisis(Long idPerfil, Long idAnalisis) {
-        Optional<Perfil> op = repository.findById(idPerfil);
+        Optional<Perfil> op = repository.porId(idPerfil);
         if (op.isPresent()) {
-            //RN: para agregar un analisis al perfil, el analisis debe existir y estar VIGENTE
-            Analisis a = analisisClient.detalle(idAnalisis);
+            //RN: el analisis debe existir y estar VIGENTE
+            Analisis a = analisisClient.porId(idAnalisis);
             if (!a.estaVigente()) {
                 throw new IllegalStateException(
                         "El analisis " + idAnalisis + " no esta vigente y no puede formar parte de un perfil.");
             }
             Perfil perfil = op.get();
-            PerfilAnalisis pa = new PerfilAnalisis(a.getId());
-            perfil.agregarAnalisis(pa);
-            return Optional.of(repository.save(perfil));
+            perfil.agregarAnalisis(a.getId());
+            return Optional.of(repository.guardar(perfil));
         }
         return Optional.empty();
     }
@@ -82,11 +81,11 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional
     public Optional<Perfil> removerAnalisis(Long idPerfil, Long idAnalisis) {
-        Optional<Perfil> op = repository.findById(idPerfil);
+        Optional<Perfil> op = repository.porId(idPerfil);
         if (op.isPresent()) {
             Perfil perfil = op.get();
-            perfil.getAnalisisPerfil().removeIf(pa -> pa.getIdAnalisis().equals(idAnalisis));
-            return Optional.of(repository.save(perfil));
+            perfil.quitarAnalisis(idAnalisis);
+            return Optional.of(repository.guardar(perfil));
         }
         return Optional.empty();
     }
@@ -94,15 +93,14 @@ public class PerfilServiceImpl implements PerfilService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Perfil> detalleConAnalisis(Long idPerfil) {
-        Optional<Perfil> op = repository.findById(idPerfil);
+        Optional<Perfil> op = repository.porId(idPerfil);
         if (op.isPresent()) {
             Perfil perfil = op.get();
             if (!perfil.getAnalisisPerfil().isEmpty()) {
                 List<Long> ids = perfil.getAnalisisPerfil().stream()
                         .map(PerfilAnalisis::getIdAnalisis)
                         .collect(Collectors.toList());
-                List<Analisis> analisis = analisisClient.obtenerAnalisisPorIds(ids);
-                perfil.setAnalisis(analisis);
+                perfil.setAnalisis(analisisClient.porIds(ids));
             }
             return Optional.of(perfil);
         }

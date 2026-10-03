@@ -1,6 +1,6 @@
-package org.onions.laboratorio.msvc.perfiles.client;
+package org.onions.laboratorio.msvc.perfiles.infraestructure.client;
 
-import org.onions.laboratorio.msvc.perfiles.models.Analisis;
+import org.onions.laboratorio.msvc.perfiles.domain.Analisis;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
