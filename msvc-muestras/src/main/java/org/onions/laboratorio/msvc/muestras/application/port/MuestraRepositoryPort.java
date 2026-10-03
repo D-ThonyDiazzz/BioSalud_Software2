@@ -10,6 +10,6 @@ public interface MuestraRepositoryPort {
     Muestra guardar(Muestra muestra);
     void eliminar(Long id);
 
-    List<Muestra> porIdDetalleOrden(Long idDetalleOrden);
+    List<Muestra> porIdOrdenAtencion(Long idOrdenAtencion);
     List<Muestra> porEstado(String estado);
 }
