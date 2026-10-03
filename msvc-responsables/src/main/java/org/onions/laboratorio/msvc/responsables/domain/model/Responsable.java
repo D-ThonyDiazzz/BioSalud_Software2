@@ -1,8 +1,8 @@
 package org.onions.laboratorio.msvc.responsables.domain.model;
 
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.Telefono;
+import org.onions.laboratorio.msvc.responsables.domain.vo.CorreoElectronico;
+import org.onions.laboratorio.msvc.responsables.domain.vo.DocumentoIdentidad;
+import org.onions.laboratorio.msvc.responsables.domain.vo.Telefono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
