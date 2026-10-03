@@ -1,15 +1,7 @@
-package org.onions.laboratorio.msvc.pacientes.models.vo;
+package org.onions.laboratorio.msvc.pacientes.domain.model.vo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-
-@Embeddable
 public class DocumentoIdentidad {
-
-    @Column(name = "tipo_documento")
     private String tipoDocumento;
-
-    @Column(name = "numero_documento")
     private String numeroDocumento;
 
     public DocumentoIdentidad() {}
