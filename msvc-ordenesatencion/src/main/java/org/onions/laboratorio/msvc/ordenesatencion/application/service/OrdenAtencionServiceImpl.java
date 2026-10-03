@@ -1,14 +1,14 @@
 package org.onions.laboratorio.msvc.ordenesatencion.application.service;
 
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.AnalisisClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.PacienteClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.PerfilClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Analisis;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Paciente;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Perfil;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.DetalleOrdenEntity;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.OrdenAtencionEntity;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.NumeroTurnoEmbeddable;
+import org.onions.laboratorio.msvc.ordenesatencion.application.dto.AnalisisInfo;
+import org.onions.laboratorio.msvc.ordenesatencion.application.dto.PerfilInfo;
+import org.onions.laboratorio.msvc.ordenesatencion.application.port.AnalisisPort;
+import org.onions.laboratorio.msvc.ordenesatencion.application.port.OrdenAtencionRepositoryPort;
+import org.onions.laboratorio.msvc.ordenesatencion.application.port.PacientePort;
+import org.onions.laboratorio.msvc.ordenesatencion.application.port.PerfilPort;
+import org.onions.laboratorio.msvc.ordenesatencion.domain.model.DetalleOrden;
+import org.onions.laboratorio.msvc.ordenesatencion.domain.model.OrdenAtencion;
+import org.onions.laboratorio.msvc.ordenesatencion.domain.vo.NumeroTurno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,151 +16,123 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Autowired
-    private OrdenAtencionRepository repository;
-
-    @Autowired
-    private PacienteClientRest pacienteClient;
-
-    @Autowired
-    private AnalisisClientRest analisisClient;
-
-    @Autowired
-    private PerfilClientRest perfilClient;
+    private OrdenAtencionRepositoryPort repository;
+    @Autowired private PacientePort pacientePort;
+    @Autowired private AnalisisPort analisisPort;
+    @Autowired private PerfilPort perfilPort;
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdenAtencionEntity> listar() {
-        return (List<OrdenAtencionEntity>) repository.findAll();
-    }
+    public List<OrdenAtencion> listar() { return repository.listar(); }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrdenAtencionEntity> porId(Long id) {
-        return repository.findById(id);
-    }
+    public Optional<OrdenAtencion> porId(Long id) { return repository.porId(id); }
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdenAtencionEntity> porPaciente(Long idPaciente) {
-        return repository.findByIdPaciente(idPaciente);
-    }
+    public List<OrdenAtencion> porPaciente(Long idPaciente) { return repository.porIdPaciente(idPaciente); }
+
 
     @Override
     @Transactional
-    public OrdenAtencionEntity crearOrden(OrdenAtencionEntity orden) {
-        //Valida existencia del paciente
-        Paciente p = pacienteClient.detalle(orden.getIdPaciente());
-        orden.setIdPaciente(p.getId());
+    public OrdenAtencion crearOrden(OrdenAtencion orden) {
+        if (!pacientePort.existe(orden.getIdPaciente())) {
+            throw new NoSuchElementException("No existe el paciente con id"+ orden.getIdPaciente());
+        }
 
         //RN: numero de turno consecutivo del dia
         LocalDate hoy = LocalDate.now();
-        Integer siguiente = repository.maxTurnoDelDia(hoy) + 1;
-        orden.setNumeroTurno(new NumeroTurnoEmbeddable(hoy, siguiente));
+        orden.setNumeroTurno(new NumeroTurno(hoy, repository.ultimoTurnoDelDia(hoy) + 1));
 
-        //Recalcula total con los detalles ya presentes
-        orden.getDetalles().forEach(DetalleOrdenEntity::calcularSubtotal);
+        orden.getDetalles().forEach(DetalleOrden::calcularSubtotal);
         orden.recalcularMontoTotal();
-        return repository.save(orden);
+        return repository.guardar(orden);
     }
 
     @Override
     @Transactional
-    public Optional<OrdenAtencionEntity> agregarAnalisisAOrden(Long idOrden, Long idAnalisis) {
-        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
-        if (op.isPresent()) {
-            OrdenAtencionEntity orden = op.get();
+    public Optional<OrdenAtencion> agregarAnalisisAOrden(Long idOrden, Long idAnalisis) {
+        Optional<OrdenAtencion> op = repository.porId(idOrden);
+        if (op.isEmpty()) return Optional.empty();
+        OrdenAtencion orden = op.get();
 
-            //Obtiene informacion del analisis y valida vigencia
-            Analisis a = analisisClient.detalle(idAnalisis);
-            if (!a.estaVigente()) {
-                throw new IllegalStateException("El analisis " + a.getId() + " no esta vigente");
-            }
-
-            DetalleOrdenEntity det = new DetalleOrdenEntity();
-            det.setIdAnalisis(a.getId());
-            det.setNombreItem(a.getNombreAnalisis());
-            det.setPrecioUnitario(a.getPrecio());
-
-            //Sin convenios (fuera del core): no se aplica descuento
-            det.setDescuentoAplicado(BigDecimal.ZERO);
-            det.calcularSubtotal();
-
-            orden.agregarDetalle(det);
-            orden.recalcularMontoTotal();
-            return Optional.of(repository.save(orden));
+        AnalisisInfo a = analisisPort.porId(idAnalisis)
+                .orElseThrow(() -> new NoSuchElementException("No existe el analisis con id " + idAnalisis));
+        if (!a.isVigente()) {
+            throw new IllegalStateException("El analisis " + a.getId() + " no esta vigente");
         }
-        return Optional.empty();
+
+        DetalleOrden det = new DetalleOrden();
+        det.setIdAnalisis(a.getId());
+        det.setNombreItem(a.getNombre());
+        det.setPrecioUnitario(a.getPrecio());
+        det.setDescuentoAplicado(BigDecimal.ZERO);   //Sin convenios (fuera del core)
+        det.calcularSubtotal();
+
+        orden.agregarDetalle(det);
+        orden.recalcularMontoTotal();
+        return Optional.of(repository.guardar(orden));
     }
 
     @Override
     @Transactional
-    public Optional<OrdenAtencionEntity> agregarPerfilAOrden(Long idOrden, Long idPerfil) {
-        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
-        if (op.isPresent()) {
-            OrdenAtencionEntity orden = op.get();
-            Perfil per = perfilClient.detalle(idPerfil);
+    public Optional<OrdenAtencion> agregarPerfilAOrden(Long idOrden, Long idPerfil) {
+        Optional<OrdenAtencion> op = repository.porId(idOrden);
+        if (op.isEmpty()) return Optional.empty();
+        OrdenAtencion orden = op.get();
 
-            DetalleOrdenEntity det = new DetalleOrdenEntity();
-            det.setIdPerfil(per.getId());
-            det.setNombreItem(per.getNombre());
-            //El precio del perfil se define como suma de sus analisis; aqui simplificamos con 0
-            //en un flujo real, se consultaria el detalle del perfil con sus analisis
-            det.setPrecioUnitario(BigDecimal.ZERO);
-            det.setDescuentoAplicado(BigDecimal.ZERO);
-            det.calcularSubtotal();
+        PerfilInfo per = perfilPort.porId(idPerfil)
+                .orElseThrow(() -> new NoSuchElementException("No existe el perfil con id " + idPerfil));
 
-            orden.agregarDetalle(det);
-            orden.recalcularMontoTotal();
-            return Optional.of(repository.save(orden));
-        }
-        return Optional.empty();
+        DetalleOrden det = new DetalleOrden();
+        det.setIdPerfil(per.getId());
+        det.setNombreItem(per.getNombre());
+        //El precio del perfil se define como suma de sus analisis; aqui simplificamos con 0
+        det.setPrecioUnitario(BigDecimal.ZERO);
+        det.setDescuentoAplicado(BigDecimal.ZERO);
+        det.calcularSubtotal();
+
+        orden.agregarDetalle(det);
+        orden.recalcularMontoTotal();
+        return Optional.of(repository.guardar(orden));
     }
 
     @Override
     @Transactional
-    public Optional<OrdenAtencionEntity> quitarDetalle(Long idOrden, Long idDetalle) {
-        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
-        if (op.isPresent()) {
-            OrdenAtencionEntity orden = op.get();
-            orden.getDetalles().removeIf(d -> d.getId() != null && d.getId().equals(idDetalle));
-            orden.recalcularMontoTotal();
-            return Optional.of(repository.save(orden));
-        }
-        return Optional.empty();
-    }
-
-
-    @Override
-    @Transactional
-    public Optional<OrdenAtencionEntity> cambiarEstado(Long idOrden, String estado) {
-        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
-        if (op.isPresent()) {
-            OrdenAtencionEntity o = op.get();
-            o.setEstado(estado);
-            return Optional.of(repository.save(o));
-        }
-        return Optional.empty();
+    public Optional<OrdenAtencion> quitarDetalle(Long idOrden, Long idDetalle) {
+        Optional<OrdenAtencion> op = repository.porId(idOrden);
+        if (op.isEmpty()) return Optional.empty();
+        OrdenAtencion orden = op.get();
+        orden.quitarDetalle(idDetalle);          // la lógica ahora vive en el dominio
+        orden.recalcularMontoTotal();
+        return Optional.of(repository.guardar(orden));
     }
 
     @Override
     @Transactional
-    public void eliminar(Long id) {
-        repository.deleteById(id);
+    public Optional<OrdenAtencion> cambiarEstado(Long idOrden, String estado) {
+        Optional<OrdenAtencion> op = repository.porId(idOrden);
+        if (op.isEmpty()) return Optional.empty();
+        OrdenAtencion o = op.get();
+        o.setEstado(estado);
+        return Optional.of(repository.guardar(o));
     }
+
+    @Override
+    @Transactional
+    public void eliminar(Long id) { repository.eliminar(id); }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrdenAtencionEntity> detalleCompleto(Long id) {
-        Optional<OrdenAtencionEntity> op = repository.findById(id);
-        op.ifPresent(o -> {
-            o.getDetalles().size();
-        });
-        return op;
+    public Optional<OrdenAtencion> detalleCompleto(Long id) {
+        return repository.porId(id);   // el adaptador ya carga los detalles al mapear
     }
 }

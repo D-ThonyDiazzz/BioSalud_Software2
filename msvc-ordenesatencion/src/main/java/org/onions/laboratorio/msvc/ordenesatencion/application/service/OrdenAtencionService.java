@@ -1,34 +1,34 @@
 package org.onions.laboratorio.msvc.ordenesatencion.application.service;
 
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.OrdenAtencionEntity;
+import org.onions.laboratorio.msvc.ordenesatencion.domain.model.OrdenAtencion;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrdenAtencionService {
 
-    List<OrdenAtencionEntity> listar();
+    List<OrdenAtencion> listar();
 
-    Optional<OrdenAtencionEntity> porId(Long id);
+    Optional<OrdenAtencion> porId(Long id);
 
-    List<OrdenAtencionEntity> porPaciente(Long idPaciente);
+    List<OrdenAtencion> porPaciente(Long idPaciente);
 
     //Crea una nueva orden asignando el numero de turno consecutivo del dia
-    OrdenAtencionEntity crearOrden(OrdenAtencionEntity orden);
+    OrdenAtencion crearOrden(OrdenAtencion orden);
 
     //Agrega un analisis existente al detalle de la orden (respetando precios y descuentos)
-    Optional<OrdenAtencionEntity> agregarAnalisisAOrden(Long idOrden, Long idAnalisis);
+    Optional<OrdenAtencion> agregarAnalisisAOrden(Long idOrden, Long idAnalisis);
 
     //Agrega un perfil existente al detalle de la orden
-    Optional<OrdenAtencionEntity> agregarPerfilAOrden(Long idOrden, Long idPerfil);
+    Optional<OrdenAtencion> agregarPerfilAOrden(Long idOrden, Long idPerfil);
 
     //Retira un detalle de una orden
-    Optional<OrdenAtencionEntity> quitarDetalle(Long idOrden, Long idDetalle);
+    Optional<OrdenAtencion> quitarDetalle(Long idOrden, Long idDetalle);
 
 
-    Optional<OrdenAtencionEntity> cambiarEstado(Long idOrden, String estado);
+    Optional<OrdenAtencion> cambiarEstado(Long idOrden, String estado);
 
     void eliminar(Long id);
 
-    Optional<OrdenAtencionEntity> detalleCompleto(Long id);
+    Optional<OrdenAtencion> detalleCompleto(Long id);
 }
