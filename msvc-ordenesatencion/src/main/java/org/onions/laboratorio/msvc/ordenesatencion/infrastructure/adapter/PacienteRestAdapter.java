@@ -5,7 +5,6 @@ import org.onions.laboratorio.msvc.ordenesatencion.application.port.PacientePort
 import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.PacienteClientRest;
 import org.springframework.stereotype.Component;
 
-import javax.naming.ServiceUnavailableException;
 
 @Component
 public class PacienteRestAdapter implements PacientePort {

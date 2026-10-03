@@ -45,7 +45,7 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
     @Transactional
     public OrdenAtencion crearOrden(OrdenAtencion orden) {
         if (!pacientePort.existe(orden.getIdPaciente())) {
-            throw new NoSuchElementException("No existe el paciente con id"+ orden.getIdPaciente());
+            throw new NoSuchElementException("No existe el paciente con id "+ orden.getIdPaciente());
         }
 
         //RN: numero de turno consecutivo del dia
