@@ -6,7 +6,6 @@ import org.onions.laboratorio.msvc.ordenesatencion.client.PerfilClientRest;
 import org.onions.laboratorio.msvc.ordenesatencion.models.Analisis;
 import org.onions.laboratorio.msvc.ordenesatencion.models.Paciente;
 import org.onions.laboratorio.msvc.ordenesatencion.models.Perfil;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.ComprobantePago;
 import org.onions.laboratorio.msvc.ordenesatencion.models.entity.DetalleOrden;
 import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
 import org.onions.laboratorio.msvc.ordenesatencion.models.vo.NumeroTurno;
@@ -137,22 +136,6 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
         return Optional.empty();
     }
 
-    @Override
-    @Transactional
-    public Optional<OrdenAtencion> emitirComprobante(Long idOrden, ComprobantePago comprobante) {
-        Optional<OrdenAtencion> op = repository.findById(idOrden);
-        if (op.isPresent()) {
-            OrdenAtencion orden = op.get();
-            if (!orden.esValida()) {
-                throw new IllegalStateException("La orden " + idOrden + " no es valida: no tiene analisis ni perfiles");
-            }
-            comprobante.setMontoTotal(orden.getMontoTotal());
-            orden.setComprobante(comprobante);
-            orden.setEstado("COBRADA");
-            return Optional.of(repository.save(orden));
-        }
-        return Optional.empty();
-    }
 
     @Override
     @Transactional
@@ -178,7 +161,6 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
         Optional<OrdenAtencion> op = repository.findById(id);
         op.ifPresent(o -> {
             o.getDetalles().size();
-            if (o.getComprobante() != null) o.getComprobante().getId();
         });
         return op;
     }

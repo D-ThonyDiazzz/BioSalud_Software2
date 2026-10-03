@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Agregado (raiz): OrdenAtencion.
-//Agrupa la solicitud de atencion con su DetalleOrden y ComprobantePago como una sola unidad.
+//Agrupa la solicitud de atencion con su DetalleOrden como una sola unidad.
 //Regla del Negocio: solo es valida si tiene al menos un analisis o perfil.
 //Regla del Negocio: si el paciente es menor, debe contar con datos completos del responsable y firma.
 //Regla del Negocio: los precios y descuentos se congelan al crear la orden.
@@ -45,10 +45,6 @@ public class OrdenAtencion {
     @JoinColumn(name = "id_orden")
     private List<DetalleOrden> detalles = new ArrayList<>();
 
-    //Un comprobante por orden - relacion 1 a 1
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_comprobante")
-    private ComprobantePago comprobante;
 
     public OrdenAtencion() {
         this.fechaRegistro = LocalDateTime.now();
@@ -94,6 +90,4 @@ public class OrdenAtencion {
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
     public List<DetalleOrden> getDetalles() { return detalles; }
     public void setDetalles(List<DetalleOrden> detalles) { this.detalles = detalles; }
-    public ComprobantePago getComprobante() { return comprobante; }
-    public void setComprobante(ComprobantePago comprobante) { this.comprobante = comprobante; }
-}
+   }

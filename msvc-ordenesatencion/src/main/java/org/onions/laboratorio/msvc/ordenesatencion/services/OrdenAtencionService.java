@@ -1,7 +1,5 @@
 package org.onions.laboratorio.msvc.ordenesatencion.services;
 
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.ComprobantePago;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.DetalleOrden;
 import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
 
 import java.util.List;
@@ -27,8 +25,6 @@ public interface OrdenAtencionService {
     //Retira un detalle de una orden
     Optional<OrdenAtencion> quitarDetalle(Long idOrden, Long idDetalle);
 
-    //Emite el comprobante de pago asociado
-    Optional<OrdenAtencion> emitirComprobante(Long idOrden, ComprobantePago comprobante);
 
     Optional<OrdenAtencion> cambiarEstado(Long idOrden, String estado);
 

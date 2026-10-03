@@ -1,8 +1,7 @@
-package org.onions.laboratorio.msvc.ordenesatencion.controllers;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.controller;
 
 import feign.FeignException;
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.ComprobantePago;
 import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
 import org.onions.laboratorio.msvc.ordenesatencion.services.OrdenAtencionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,17 +91,6 @@ public class OrdenAtencionController {
         Optional<OrdenAtencion> op = service.quitarDetalle(idOrden, idDetalle);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/emitirComprobante/{idOrden}")
-    public ResponseEntity<?> emitirComprobante(@PathVariable Long idOrden, @RequestBody ComprobantePago comprobante) {
-        try {
-            Optional<OrdenAtencion> op = service.emitirComprobante(idOrden, comprobante);
-            if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
-            return ResponseEntity.notFound().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("Mensaje", e.getMessage()));
-        }
     }
 
     @PatchMapping("/{idOrden}/estado")
