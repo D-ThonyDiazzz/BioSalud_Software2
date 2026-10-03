@@ -11,8 +11,8 @@ public class MuestraEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_detalle_orden", nullable = false)
-    private Long idDetalleOrden;
+    @Column(name = "id_orden_atencion", nullable = false)
+    private Long idOrdenAtencion;
 
     // Usamos la clase Embeddable de infraestructura, no la del dominio
     @Embedded
@@ -36,8 +36,8 @@ public class MuestraEntity {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getIdDetalleOrden() { return idDetalleOrden; }
-    public void setIdDetalleOrden(Long idDetalleOrden) { this.idDetalleOrden = idDetalleOrden; }
+    public Long getIdOrdenAtencion() { return idOrdenAtencion; }
+    public void setIdOrdenAtencion(Long idOrdenAtencion) { this.idOrdenAtencion = idOrdenAtencion; }
 
     public MedioBiologicoEmbeddable getMedioBiologico() { return medioBiologico; }
     public void setMedioBiologico(MedioBiologicoEmbeddable medioBiologico) { this.medioBiologico = medioBiologico; }

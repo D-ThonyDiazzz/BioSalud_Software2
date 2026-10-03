@@ -46,8 +46,8 @@ public class MuestraJpaAdapter implements MuestraRepositoryPort {
     }
 
     @Override
-    public List<Muestra> porIdDetalleOrden(Long idDetalleOrden) {
-        return repository.findByIdDetalleOrden(idDetalleOrden).stream()
+    public List<Muestra> porIdOrdenAtencion(Long idOrdenAtencion) {
+        return repository.findByIdOrdenAtencion(idOrdenAtencion).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -63,7 +63,7 @@ public class MuestraJpaAdapter implements MuestraRepositoryPort {
     private Muestra toDomain(MuestraEntity entity) {
         Muestra domain = new Muestra();
         domain.setId(entity.getId());
-        domain.setIdDetalleOrden(entity.getIdDetalleOrden());
+        domain.setIdOrdenAtencion(entity.getIdOrdenAtencion());
         domain.setCondicionesVerificadas(entity.isCondicionesVerificadas());
         domain.setCodigoRotulado(entity.getCodigoRotulado());
         domain.setFechaToma(entity.getFechaToma());
@@ -81,7 +81,7 @@ public class MuestraJpaAdapter implements MuestraRepositoryPort {
     private MuestraEntity toEntity(Muestra domain) {
         MuestraEntity entity = new MuestraEntity();
         entity.setId(domain.getId());
-        entity.setIdDetalleOrden(domain.getIdDetalleOrden());
+        entity.setIdOrdenAtencion(domain.getIdOrdenAtencion());
         entity.setCondicionesVerificadas(domain.isCondicionesVerificadas());
         entity.setCodigoRotulado(domain.getCodigoRotulado());
         entity.setFechaToma(domain.getFechaToma());

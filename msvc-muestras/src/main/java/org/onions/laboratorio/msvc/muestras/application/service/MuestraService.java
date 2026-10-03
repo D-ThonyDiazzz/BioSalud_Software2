@@ -11,7 +11,7 @@ public interface MuestraService {
 
     Optional<Muestra> porId(Long id);
 
-    List<Muestra> porDetalleOrden(Long idDetalleOrden);
+    List<Muestra> porOrdenAtencion(Long idOrdenAtencion);
 
     //Crea una nueva muestra a partir de un detalle de orden
     Muestra registrarMuestra(Muestra muestra);

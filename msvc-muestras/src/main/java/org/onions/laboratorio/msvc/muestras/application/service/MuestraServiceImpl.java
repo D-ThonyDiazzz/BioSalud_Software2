@@ -1,15 +1,14 @@
 package org.onions.laboratorio.msvc.muestras.application.service;
 
-import feign.FeignException;
 import org.onions.laboratorio.msvc.muestras.application.port.MuestraRepositoryPort;
-import org.onions.laboratorio.msvc.muestras.infrastructure.client.OrdenClientRest;
-import org.onions.laboratorio.msvc.muestras.infrastructure.client.model.OrdenAtencion;
+import org.onions.laboratorio.msvc.muestras.application.port.OrdenAtencionPort;
 import org.onions.laboratorio.msvc.muestras.domain.model.Muestra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -19,7 +18,7 @@ public class MuestraServiceImpl implements MuestraService {
     private MuestraRepositoryPort repository;
 
     @Autowired
-    private OrdenClientRest ordenClient;
+    private OrdenAtencionPort ordenPort;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,22 +34,19 @@ public class MuestraServiceImpl implements MuestraService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Muestra> porDetalleOrden(Long idDetalleOrden) {
-        return repository.porIdDetalleOrden(idDetalleOrden);
+    public List<Muestra> porOrdenAtencion(Long idOrdenAtencion) {
+        return repository.porIdOrdenAtencion(idOrdenAtencion);
     }
 
     @Override
     @Transactional
     public Muestra registrarMuestra(Muestra muestra) {
-        //Valida que la orden y el detalle existan en msvc-ordenesatencion
-        try {
-            OrdenAtencion o = ordenClient.detalleCompleto(muestra.getIdDetalleOrden());
-        } catch (FeignException e) {
-            //Se conserva la creacion aunque la orden no responda
+        if (!ordenPort.existe(muestra.getIdOrdenAtencion())) {
+            throw new NoSuchElementException("No existe la orden de atencion con id " + muestra.getIdOrdenAtencion());
         }
         //Genera codigo de rotulado si no viene
         if (muestra.getCodigoRotulado() == null) {
-            muestra.setCodigoRotulado("MU-" + muestra.getIdDetalleOrden() + "-" + System.currentTimeMillis());
+            muestra.setCodigoRotulado("MU-" + muestra.getIdOrdenAtencion() + "-" + System.currentTimeMillis());
         }
         return repository.guardar(muestra);
     }

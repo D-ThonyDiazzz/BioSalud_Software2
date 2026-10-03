@@ -10,11 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/muestras")
@@ -35,9 +31,9 @@ public class MuestraController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/detalleOrden/{idDetalle}")
-    public List<Muestra> porDetalleOrden(@PathVariable Long idDetalle) {
-        return service.porDetalleOrden(idDetalle);
+    @GetMapping("/ordenAtencion/{idOrden}")
+    public List<Muestra> porOrdenAtencion(@PathVariable Long idOrden) {
+        return service.porOrdenAtencion(idOrden);
     }
 
     @PostMapping
@@ -45,9 +41,12 @@ public class MuestraController {
         if (result.hasErrors()) return validar(result);
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.registrarMuestra(muestra));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("Mensaje", e.getMessage()));
         } catch (FeignException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections
-                    .singletonMap("Mensaje", "No existe el detalle de orden referenciado: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Collections
+                    .singletonMap("Mensaje", "No se pudo consultar msvc-ordenesatencion: " + e.getMessage()));
         }
     }
 

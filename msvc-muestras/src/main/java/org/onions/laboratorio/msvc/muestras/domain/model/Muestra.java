@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 
 // Agregado (raiz): Muestra.
 // Administra la extraccion, recepcion, rotulado y estado fisico de la muestra biologica.
-// Referencia SOLO por identificador al DetalleOrden que la origino (msvc-ordenesatencion).
+// Referencia SOLO por identificador al OrdenAtencion que la origino (msvc-ordenesatencion).
 public class Muestra {
 
     private Long id;
-    private Long idDetalleOrden;
+    private Long idOrdenAtencion;
     private MedioBiologico medioBiologico;
     private boolean condicionesVerificadas;
     private String codigoRotulado;
@@ -35,8 +35,8 @@ public class Muestra {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Long getIdDetalleOrden() { return idDetalleOrden; }
-    public void setIdDetalleOrden(Long idDetalleOrden) { this.idDetalleOrden = idDetalleOrden; }
+    public Long getIdOrdenAtencion() { return idOrdenAtencion; }
+    public void setIdOrdenAtencion(Long idOrdenAtencion) { this.idOrdenAtencion = idOrdenAtencion; }
     public MedioBiologico getMedioBiologico() { return medioBiologico; }
     public void setMedioBiologico(MedioBiologico medioBiologico) { this.medioBiologico = medioBiologico; }
     public boolean isCondicionesVerificadas() { return condicionesVerificadas; }
