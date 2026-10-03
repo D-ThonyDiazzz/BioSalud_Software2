@@ -2,8 +2,8 @@ package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.controller;
 
 import feign.FeignException;
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
-import org.onions.laboratorio.msvc.ordenesatencion.services.OrdenAtencionService;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.OrdenAtencionEntity;
+import org.onions.laboratorio.msvc.ordenesatencion.application.service.OrdenAtencionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,31 +24,31 @@ public class OrdenAtencionController {
     private OrdenAtencionService service;
 
     @GetMapping
-    public List<OrdenAtencion> listar() {
+    public List<OrdenAtencionEntity> listar() {
         return service.listar();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> detalle(@PathVariable Long id) {
-        Optional<OrdenAtencion> op = service.porId(id);
+        Optional<OrdenAtencionEntity> op = service.porId(id);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/detalleCompleto/{id}")
     public ResponseEntity<?> detalleCompleto(@PathVariable Long id) {
-        Optional<OrdenAtencion> op = service.detalleCompleto(id);
+        Optional<OrdenAtencionEntity> op = service.detalleCompleto(id);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/paciente/{idPaciente}")
-    public List<OrdenAtencion> porPaciente(@PathVariable Long idPaciente) {
+    public List<OrdenAtencionEntity> porPaciente(@PathVariable Long idPaciente) {
         return service.porPaciente(idPaciente);
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@Valid @RequestBody OrdenAtencion orden, BindingResult result) {
+    public ResponseEntity<?> crear(@Valid @RequestBody OrdenAtencionEntity orden, BindingResult result) {
         if (result.hasErrors()) return validar(result);
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.crearOrden(orden));
@@ -63,7 +63,7 @@ public class OrdenAtencionController {
     @PutMapping("/agregarAnalisis/{idOrden}/{idAnalisis}")
     public ResponseEntity<?> agregarAnalisis(@PathVariable Long idOrden, @PathVariable Long idAnalisis) {
         try {
-            Optional<OrdenAtencion> op = service.agregarAnalisisAOrden(idOrden, idAnalisis);
+            Optional<OrdenAtencionEntity> op = service.agregarAnalisisAOrden(idOrden, idAnalisis);
             if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
             return ResponseEntity.notFound().build();
         } catch (FeignException e) {
@@ -77,7 +77,7 @@ public class OrdenAtencionController {
     @PutMapping("/agregarPerfil/{idOrden}/{idPerfil}")
     public ResponseEntity<?> agregarPerfil(@PathVariable Long idOrden, @PathVariable Long idPerfil) {
         try {
-            Optional<OrdenAtencion> op = service.agregarPerfilAOrden(idOrden, idPerfil);
+            Optional<OrdenAtencionEntity> op = service.agregarPerfilAOrden(idOrden, idPerfil);
             if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
             return ResponseEntity.notFound().build();
         } catch (FeignException e) {
@@ -88,21 +88,21 @@ public class OrdenAtencionController {
 
     @DeleteMapping("/quitarDetalle/{idOrden}/{idDetalle}")
     public ResponseEntity<?> quitarDetalle(@PathVariable Long idOrden, @PathVariable Long idDetalle) {
-        Optional<OrdenAtencion> op = service.quitarDetalle(idOrden, idDetalle);
+        Optional<OrdenAtencionEntity> op = service.quitarDetalle(idOrden, idDetalle);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{idOrden}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable Long idOrden, @RequestParam String estado) {
-        Optional<OrdenAtencion> op = service.cambiarEstado(idOrden, estado);
+        Optional<OrdenAtencionEntity> op = service.cambiarEstado(idOrden, estado);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        Optional<OrdenAtencion> op = service.porId(id);
+        Optional<OrdenAtencionEntity> op = service.porId(id);
         if (op.isPresent()) {
             service.eliminar(id);
             return ResponseEntity.noContent().build();

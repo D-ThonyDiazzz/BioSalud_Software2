@@ -1,41 +1,17 @@
-package org.onions.laboratorio.msvc.ordenesatencion.models.entity;
+package org.onions.laboratorio.msvc.ordenesatencion.domain.model;
 
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-//Entidad hija del agregado OrdenAtencion.
-//Representa cada analisis o perfil solicitado en una orden, con precios congelados
-//al momento de creacion de la orden (RN: los precios no cambian retroactivamente).
-@Entity
-@Table(name = "detalles_orden")
 public class DetalleOrden {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "id_orden", insertable = false, updatable = false)
     private Long idOrdenAtencion;
-
-    //Puede referenciar a un analisis o a un perfil (uno de los dos)
-    @Column(name = "id_analisis")
     private Long idAnalisis;
-
-    @Column(name = "id_perfil")
     private Long idPerfil;
-
-    //Nombre snapshot (congelado)
-    @Column(name = "nombre_item")
     private String nombreItem;
-
-    @Column(name = "precio_unitario")
     private BigDecimal precioUnitario;
-
-    @Column(name = "descuento_aplicado")
     private BigDecimal descuentoAplicado;
-
-    @Column(name = "subtotal")
     private BigDecimal subtotal;
 
     public DetalleOrden() {

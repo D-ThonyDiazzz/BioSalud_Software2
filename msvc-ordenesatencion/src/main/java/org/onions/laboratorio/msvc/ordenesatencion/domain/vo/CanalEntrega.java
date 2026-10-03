@@ -1,17 +1,10 @@
-package org.onions.laboratorio.msvc.ordenesatencion.models.vo;
+package org.onions.laboratorio.msvc.ordenesatencion.domain.vo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 
-@Embeddable
 public class CanalEntrega {
 
-    @Column(name = "canal_tipo")
     private String tipo;                 // EMAIL, WHATSAPP, PRESENCIAL...
-
-    @Column(name = "canal_destino")
     private String destinoContacto;
-
     public CanalEntrega() {}
 
     public CanalEntrega(String tipo, String destinoContacto) {

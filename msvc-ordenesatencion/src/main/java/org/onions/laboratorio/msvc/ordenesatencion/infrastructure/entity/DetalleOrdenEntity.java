@@ -1,0 +1,61 @@
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity;
+
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+
+//Entidad hija del agregado OrdenAtencionEntity.
+//Representa cada analisis o perfil solicitado en una orden, con precios congelados
+//al momento de creacion de la orden (RN: los precios no cambian retroactivamente).
+@Entity
+@Table(name = "detalles_orden")
+public class DetalleOrdenEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "id_orden", insertable = false, updatable = false)
+    private Long idOrdenAtencion;
+
+    //Puede referenciar a un analisis o a un perfil (uno de los dos)
+    @Column(name = "id_analisis")
+    private Long idAnalisis;
+
+    @Column(name = "id_perfil")
+    private Long idPerfil;
+
+    //Nombre snapshot (congelado)
+    @Column(name = "nombre_item")
+    private String nombreItem;
+
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario;
+
+    @Column(name = "descuento_aplicado")
+    private BigDecimal descuentoAplicado;
+
+    @Column(name = "subtotal")
+    private BigDecimal subtotal;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Long getIdAnalisis() { return idAnalisis; }
+    public void setIdAnalisis(Long idAnalisis) { this.idAnalisis = idAnalisis; }
+    public Long getIdPerfil() { return idPerfil; }
+    public void setIdPerfil(Long idPerfil) { this.idPerfil = idPerfil; }
+    public String getNombreItem() { return nombreItem; }
+    public void setNombreItem(String nombreItem) { this.nombreItem = nombreItem; }
+    public BigDecimal getPrecioUnitario() { return precioUnitario; }
+    public void setPrecioUnitario(BigDecimal precioUnitario) { this.precioUnitario = precioUnitario; }
+    public BigDecimal getDescuentoAplicado() { return descuentoAplicado; }
+    public void setDescuentoAplicado(BigDecimal descuentoAplicado) { this.descuentoAplicado = descuentoAplicado; }
+    public BigDecimal getSubtotal() { return subtotal; }
+    public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+    public Long getIdOrdenAtencion() {
+        return idOrdenAtencion;
+    }
+    public void setIdOrdenAtencion(Long idOrdenAtencion) {
+        this.idOrdenAtencion = idOrdenAtencion;
+    }
+}

@@ -1,15 +1,15 @@
-package org.onions.laboratorio.msvc.ordenesatencion.services;
+package org.onions.laboratorio.msvc.ordenesatencion.application.service;
 
-import org.onions.laboratorio.msvc.ordenesatencion.client.AnalisisClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.client.PacienteClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.client.PerfilClientRest;
-import org.onions.laboratorio.msvc.ordenesatencion.models.Analisis;
-import org.onions.laboratorio.msvc.ordenesatencion.models.Paciente;
-import org.onions.laboratorio.msvc.ordenesatencion.models.Perfil;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.DetalleOrden;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
-import org.onions.laboratorio.msvc.ordenesatencion.models.vo.NumeroTurno;
-import org.onions.laboratorio.msvc.ordenesatencion.repositories.OrdenAtencionRepository;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.AnalisisClientRest;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.PacienteClientRest;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.PerfilClientRest;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Analisis;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Paciente;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Perfil;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.DetalleOrdenEntity;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.OrdenAtencionEntity;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo.NumeroTurnoEmbeddable;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.repository.OrdenAtencionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,25 +36,25 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdenAtencion> listar() {
-        return (List<OrdenAtencion>) repository.findAll();
+    public List<OrdenAtencionEntity> listar() {
+        return (List<OrdenAtencionEntity>) repository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrdenAtencion> porId(Long id) {
+    public Optional<OrdenAtencionEntity> porId(Long id) {
         return repository.findById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdenAtencion> porPaciente(Long idPaciente) {
+    public List<OrdenAtencionEntity> porPaciente(Long idPaciente) {
         return repository.findByIdPaciente(idPaciente);
     }
 
     @Override
     @Transactional
-    public OrdenAtencion crearOrden(OrdenAtencion orden) {
+    public OrdenAtencionEntity crearOrden(OrdenAtencionEntity orden) {
         //Valida existencia del paciente
         Paciente p = pacienteClient.detalle(orden.getIdPaciente());
         orden.setIdPaciente(p.getId());
@@ -62,20 +62,20 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
         //RN: numero de turno consecutivo del dia
         LocalDate hoy = LocalDate.now();
         Integer siguiente = repository.maxTurnoDelDia(hoy) + 1;
-        orden.setNumeroTurno(new NumeroTurno(hoy, siguiente));
+        orden.setNumeroTurno(new NumeroTurnoEmbeddable(hoy, siguiente));
 
         //Recalcula total con los detalles ya presentes
-        orden.getDetalles().forEach(DetalleOrden::calcularSubtotal);
+        orden.getDetalles().forEach(DetalleOrdenEntity::calcularSubtotal);
         orden.recalcularMontoTotal();
         return repository.save(orden);
     }
 
     @Override
     @Transactional
-    public Optional<OrdenAtencion> agregarAnalisisAOrden(Long idOrden, Long idAnalisis) {
-        Optional<OrdenAtencion> op = repository.findById(idOrden);
+    public Optional<OrdenAtencionEntity> agregarAnalisisAOrden(Long idOrden, Long idAnalisis) {
+        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
         if (op.isPresent()) {
-            OrdenAtencion orden = op.get();
+            OrdenAtencionEntity orden = op.get();
 
             //Obtiene informacion del analisis y valida vigencia
             Analisis a = analisisClient.detalle(idAnalisis);
@@ -83,7 +83,7 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
                 throw new IllegalStateException("El analisis " + a.getId() + " no esta vigente");
             }
 
-            DetalleOrden det = new DetalleOrden();
+            DetalleOrdenEntity det = new DetalleOrdenEntity();
             det.setIdAnalisis(a.getId());
             det.setNombreItem(a.getNombreAnalisis());
             det.setPrecioUnitario(a.getPrecio());
@@ -101,13 +101,13 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Override
     @Transactional
-    public Optional<OrdenAtencion> agregarPerfilAOrden(Long idOrden, Long idPerfil) {
-        Optional<OrdenAtencion> op = repository.findById(idOrden);
+    public Optional<OrdenAtencionEntity> agregarPerfilAOrden(Long idOrden, Long idPerfil) {
+        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
         if (op.isPresent()) {
-            OrdenAtencion orden = op.get();
+            OrdenAtencionEntity orden = op.get();
             Perfil per = perfilClient.detalle(idPerfil);
 
-            DetalleOrden det = new DetalleOrden();
+            DetalleOrdenEntity det = new DetalleOrdenEntity();
             det.setIdPerfil(per.getId());
             det.setNombreItem(per.getNombre());
             //El precio del perfil se define como suma de sus analisis; aqui simplificamos con 0
@@ -125,10 +125,10 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Override
     @Transactional
-    public Optional<OrdenAtencion> quitarDetalle(Long idOrden, Long idDetalle) {
-        Optional<OrdenAtencion> op = repository.findById(idOrden);
+    public Optional<OrdenAtencionEntity> quitarDetalle(Long idOrden, Long idDetalle) {
+        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
         if (op.isPresent()) {
-            OrdenAtencion orden = op.get();
+            OrdenAtencionEntity orden = op.get();
             orden.getDetalles().removeIf(d -> d.getId() != null && d.getId().equals(idDetalle));
             orden.recalcularMontoTotal();
             return Optional.of(repository.save(orden));
@@ -139,10 +139,10 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Override
     @Transactional
-    public Optional<OrdenAtencion> cambiarEstado(Long idOrden, String estado) {
-        Optional<OrdenAtencion> op = repository.findById(idOrden);
+    public Optional<OrdenAtencionEntity> cambiarEstado(Long idOrden, String estado) {
+        Optional<OrdenAtencionEntity> op = repository.findById(idOrden);
         if (op.isPresent()) {
-            OrdenAtencion o = op.get();
+            OrdenAtencionEntity o = op.get();
             o.setEstado(estado);
             return Optional.of(repository.save(o));
         }
@@ -157,8 +157,8 @@ public class OrdenAtencionServiceImpl implements OrdenAtencionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrdenAtencion> detalleCompleto(Long id) {
-        Optional<OrdenAtencion> op = repository.findById(id);
+    public Optional<OrdenAtencionEntity> detalleCompleto(Long id) {
+        Optional<OrdenAtencionEntity> op = repository.findById(id);
         op.ifPresent(o -> {
             o.getDetalles().size();
         });

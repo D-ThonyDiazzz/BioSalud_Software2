@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.ordenesatencion.models.vo;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 //RN: la numeracion de turnos es consecutiva cada dia y se reinicia cada manana.
 @Embeddable
-public class NumeroTurno {
+public class NumeroTurnoEmbeddable {
 
     @Column(name = "turno_fecha")
     private LocalDate fechaTurno;
@@ -15,9 +15,9 @@ public class NumeroTurno {
     @Column(name = "turno_numero")
     private Integer numero;
 
-    public NumeroTurno() {}
+    public NumeroTurnoEmbeddable() {}
 
-    public NumeroTurno(LocalDate fechaTurno, Integer numero) {
+    public NumeroTurnoEmbeddable(LocalDate fechaTurno, Integer numero) {
         this.fechaTurno = fechaTurno;
         this.numero = numero;
     }
