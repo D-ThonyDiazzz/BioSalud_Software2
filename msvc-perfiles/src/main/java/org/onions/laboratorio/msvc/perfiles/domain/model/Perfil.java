@@ -1,44 +1,28 @@
-package org.onions.laboratorio.msvc.perfiles.models.entity;
+package org.onions.laboratorio.msvc.perfiles.domain.model;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import org.onions.laboratorio.msvc.perfiles.models.Analisis;
-import org.onions.laboratorio.msvc.perfiles.models.vo.CodigoPerfil;
+import org.onions.laboratorio.msvc.perfiles.domain.Analisis;
+import org.onions.laboratorio.msvc.perfiles.domain.vo.CodigoPerfil;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 //Agregado (raiz): Perfil.
-//Paquete comercial que agrupa varios analisis (ej. "Chequeo Preventivo Basico").
 //Regla del Negocio: solo puede ofrecerse si TODOS sus analisis estan vigentes en msvc-analisis.
-@Entity
-@Table(name = "perfiles")
 public class Perfil {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Embedded
     private CodigoPerfil codigoPerfil;
 
     @NotEmpty
     private String nombre;
 
-    @Column(length = 500)
     private String descripcion;
-
-    @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
-
-    //Entidades hijas del agregado: analisis que componen el perfil
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "perfil_id")
     private List<PerfilAnalisis> analisisPerfil;
 
-    //Detalles de los analisis cargados via Feign (no se persiste)
-    @Transient
+    //Detalles cargados via Feign (no se persiste)
     private List<Analisis> analisis = new ArrayList<>();
 
     public Perfil() {
@@ -46,12 +30,17 @@ public class Perfil {
         this.analisisPerfil = new ArrayList<>();
     }
 
-    public void agregarAnalisis(PerfilAnalisis pa) {
+    public void agregarAnalisis(Long idAnalisis) {
+        PerfilAnalisis pa = new PerfilAnalisis(idAnalisis);
+        if (this.analisisPerfil.contains(pa)) {
+            throw new IllegalStateException(
+                    "El analisis " + idAnalisis + " ya forma parte del perfil.");
+        }
         this.analisisPerfil.add(pa);
     }
 
-    public void quitarAnalisis(PerfilAnalisis pa) {
-        this.analisisPerfil.remove(pa);
+    public void quitarAnalisis(Long idAnalisis) {
+        this.analisisPerfil.removeIf(pa -> pa.getIdAnalisis().equals(idAnalisis));
     }
 
     public Long getId() { return id; }

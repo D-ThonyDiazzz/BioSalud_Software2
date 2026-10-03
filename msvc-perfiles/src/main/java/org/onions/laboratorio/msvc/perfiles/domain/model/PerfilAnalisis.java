@@ -1,19 +1,9 @@
-package org.onions.laboratorio.msvc.perfiles.models.entity;
+package org.onions.laboratorio.msvc.perfiles.domain.model;
 
-import jakarta.persistence.*;
-
-//Entidad hija del agregado Perfil.
-//Representa la relacion entre un Perfil y los Analisis que lo integran.
-//Solo guarda idAnalisis; el Analisis en si vive en msvc-analisis.
-@Entity
-@Table(name = "perfil_analisis")
+//Entidad hija del agregado Perfil. Solo guarda el idAnalisis (el Analisis vive en msvc-analisis).
 public class PerfilAnalisis {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "id_analisis", unique = true)
     private Long idAnalisis;
 
     public PerfilAnalisis() {}

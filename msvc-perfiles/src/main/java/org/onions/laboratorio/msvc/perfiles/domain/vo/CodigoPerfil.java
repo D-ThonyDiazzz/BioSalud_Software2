@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.perfiles.models.vo;
+package org.onions.laboratorio.msvc.perfiles.domain.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
