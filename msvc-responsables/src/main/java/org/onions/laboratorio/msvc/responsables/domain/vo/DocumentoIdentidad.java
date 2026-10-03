@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.responsables.domain.model.vo;
+package org.onions.laboratorio.msvc.responsables.domain.vo;
 
 public class DocumentoIdentidad {
 

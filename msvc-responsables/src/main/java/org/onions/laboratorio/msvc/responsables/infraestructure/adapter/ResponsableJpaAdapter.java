@@ -2,9 +2,9 @@ package org.onions.laboratorio.msvc.responsables.infraestructure.adapter;
 
 import org.onions.laboratorio.msvc.responsables.application.port.ResponsableRepositoryPort;
 import org.onions.laboratorio.msvc.responsables.domain.model.Responsable;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.responsables.domain.model.vo.Telefono;
+import org.onions.laboratorio.msvc.responsables.domain.vo.CorreoElectronico;
+import org.onions.laboratorio.msvc.responsables.domain.vo.DocumentoIdentidad;
+import org.onions.laboratorio.msvc.responsables.domain.vo.Telefono;
 import org.onions.laboratorio.msvc.responsables.infraestructure.entity.CorreoElectronicoEmbeddable;
 import org.onions.laboratorio.msvc.responsables.infraestructure.entity.DocumentoIdentidadEmbeddable;
 import org.onions.laboratorio.msvc.responsables.infraestructure.entity.ResponsableEntity;
