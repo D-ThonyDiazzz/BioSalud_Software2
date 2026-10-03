@@ -1,21 +1,16 @@
-package org.onions.laboratorio.msvc.ordenesatencion.controllers;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.controller;
 
 import feign.FeignException;
 import jakarta.validation.Valid;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.ComprobantePago;
-import org.onions.laboratorio.msvc.ordenesatencion.models.entity.OrdenAtencion;
-import org.onions.laboratorio.msvc.ordenesatencion.services.OrdenAtencionService;
+import org.onions.laboratorio.msvc.ordenesatencion.application.service.OrdenAtencionService;
+import org.onions.laboratorio.msvc.ordenesatencion.domain.model.OrdenAtencion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -53,9 +48,12 @@ public class OrdenAtencionController {
         if (result.hasErrors()) return validar(result);
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.crearOrden(orden));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("Mensaje", e.getMessage()));
         } catch (FeignException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections
-                    .singletonMap("Mensaje", "No existe el paciente referenciado: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Collections
+                    .singletonMap("Mensaje", "No se pudo consultar el servicio externo: " + e.getMessage()));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("Mensaje", e.getMessage()));
         }
@@ -67,9 +65,12 @@ public class OrdenAtencionController {
             Optional<OrdenAtencion> op = service.agregarAnalisisAOrden(idOrden, idAnalisis);
             if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
             return ResponseEntity.notFound().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("Mensaje", e.getMessage()));
         } catch (FeignException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections
-                    .singletonMap("Mensaje", "No existe el analisis: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Collections
+                    .singletonMap("Mensaje", "No se pudo consultar el servicio externo: " + e.getMessage()));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("Mensaje", e.getMessage()));
         }
@@ -81,28 +82,19 @@ public class OrdenAtencionController {
             Optional<OrdenAtencion> op = service.agregarPerfilAOrden(idOrden, idPerfil);
             if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
             return ResponseEntity.notFound().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("Mensaje", e.getMessage()));
         } catch (FeignException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections
-                    .singletonMap("Mensaje", "No existe el perfil: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Collections
+                    .singletonMap("Mensaje", "No se pudo consultar el servicio externo: " + e.getMessage()));
         }
     }
-
     @DeleteMapping("/quitarDetalle/{idOrden}/{idDetalle}")
     public ResponseEntity<?> quitarDetalle(@PathVariable Long idOrden, @PathVariable Long idDetalle) {
         Optional<OrdenAtencion> op = service.quitarDetalle(idOrden, idDetalle);
         if (op.isPresent()) return ResponseEntity.ok(op.get());
         return ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/emitirComprobante/{idOrden}")
-    public ResponseEntity<?> emitirComprobante(@PathVariable Long idOrden, @RequestBody ComprobantePago comprobante) {
-        try {
-            Optional<OrdenAtencion> op = service.emitirComprobante(idOrden, comprobante);
-            if (op.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(op.get());
-            return ResponseEntity.notFound().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("Mensaje", e.getMessage()));
-        }
     }
 
     @PatchMapping("/{idOrden}/estado")

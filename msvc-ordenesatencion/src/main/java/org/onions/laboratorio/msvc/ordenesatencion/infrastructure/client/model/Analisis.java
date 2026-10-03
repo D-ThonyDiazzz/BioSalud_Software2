@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.ordenesatencion.models;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model;
 
 import java.math.BigDecimal;
 
