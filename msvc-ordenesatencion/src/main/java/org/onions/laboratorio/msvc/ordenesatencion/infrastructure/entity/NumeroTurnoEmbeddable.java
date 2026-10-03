@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

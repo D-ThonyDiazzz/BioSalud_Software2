@@ -8,8 +8,7 @@ import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.P
 import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.client.model.Perfil;
 import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.DetalleOrdenEntity;
 import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.OrdenAtencionEntity;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo.NumeroTurnoEmbeddable;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.repository.OrdenAtencionRepository;
+import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity.NumeroTurnoEmbeddable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo;
+package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -19,9 +19,6 @@ public class CanalEntregaEmbeddable {
         this.destinoContacto = destinoContacto;
     }
 
-    public boolean esCanalDigital() {   // los valores son una suposición mía, ajústalos
-        return "EMAIL".equalsIgnoreCase(tipo) || "WHATSAPP".equalsIgnoreCase(tipo);
-    }
 
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }

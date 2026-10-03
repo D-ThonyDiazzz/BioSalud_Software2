@@ -1,8 +1,6 @@
 package org.onions.laboratorio.msvc.ordenesatencion.infrastructure.entity;
 
 import jakarta.persistence.*;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo.CanalEntregaEmbeddable;
-import org.onions.laboratorio.msvc.ordenesatencion.infrastructure.vo.NumeroTurnoEmbeddable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
