@@ -1,6 +1,7 @@
 package org.onions.laboratorio.msvc.ordenesatencion.models.entity;
 
 import jakarta.persistence.*;
+import org.onions.laboratorio.msvc.ordenesatencion.models.vo.CanalEntrega;
 import org.onions.laboratorio.msvc.ordenesatencion.models.vo.NumeroTurno;
 
 import java.math.BigDecimal;
@@ -28,6 +29,12 @@ public class OrdenAtencion {
 
     @Embedded
     private NumeroTurno numeroTurno;
+
+    @Embedded
+    private CanalEntrega canalEntrega;
+
+    public CanalEntrega getCanalEntrega() { return canalEntrega; }
+    public void setCanalEntrega(CanalEntrega canalEntrega) { this.canalEntrega = canalEntrega; }
 
     @Column(name = "monto_total")
     private BigDecimal montoTotal;

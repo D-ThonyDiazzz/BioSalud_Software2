@@ -15,6 +15,9 @@ public class DetalleOrden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "id_orden", insertable = false, updatable = false)
+    private Long idOrdenAtencion;
+
     //Puede referenciar a un analisis o a un perfil (uno de los dos)
     @Column(name = "id_analisis")
     private Long idAnalisis;
@@ -61,4 +64,10 @@ public class DetalleOrden {
     public void setDescuentoAplicado(BigDecimal descuentoAplicado) { this.descuentoAplicado = descuentoAplicado; }
     public BigDecimal getSubtotal() { return subtotal; }
     public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+    public Long getIdOrdenAtencion() {
+        return idOrdenAtencion;
+    }
+    public void setIdOrdenAtencion(Long idOrdenAtencion) {
+        this.idOrdenAtencion = idOrdenAtencion;
+    }
 }
