@@ -2,8 +2,8 @@ package org.onions.laboratorio.msvc.analisis.infrastructure.adapter;
 
 import org.onions.laboratorio.msvc.analisis.application.port.AnalisisRepositoryPort;
 import org.onions.laboratorio.msvc.analisis.domain.model.Analisis;
-import org.onions.laboratorio.msvc.analisis.domain.model.vo.CondicionesPrevias;
-import org.onions.laboratorio.msvc.analisis.domain.model.vo.MedioBiologico;
+import org.onions.laboratorio.msvc.analisis.domain.vo.CondicionesPrevias;
+import org.onions.laboratorio.msvc.analisis.domain.vo.MedioBiologico;
 import org.onions.laboratorio.msvc.analisis.infrastructure.entity.AnalisisEntity;
 import org.onions.laboratorio.msvc.analisis.infrastructure.entity.CondicionesPreviasEmbeddable;
 import org.onions.laboratorio.msvc.analisis.infrastructure.entity.MedioBiologicoEmbeddable;

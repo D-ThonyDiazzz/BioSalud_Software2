@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.analisis.domain.model.vo;
+package org.onions.laboratorio.msvc.analisis.domain.vo;
 
 /** Indicaciones que debe cumplir el paciente antes del analisis. */
 public class CondicionesPrevias {

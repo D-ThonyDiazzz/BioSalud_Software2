@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.analisis.domain.model.vo;
+package org.onions.laboratorio.msvc.analisis.domain.vo;
 
 /** Tipo de muestra corporal y contenedor requerido para procesarla. */
 public class MedioBiologico {

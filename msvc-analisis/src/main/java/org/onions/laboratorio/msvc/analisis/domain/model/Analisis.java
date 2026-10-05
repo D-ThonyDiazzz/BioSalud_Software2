@@ -1,7 +1,7 @@
 package org.onions.laboratorio.msvc.analisis.domain.model;
 
-import org.onions.laboratorio.msvc.analisis.domain.model.vo.CondicionesPrevias;
-import org.onions.laboratorio.msvc.analisis.domain.model.vo.MedioBiologico;
+import org.onions.laboratorio.msvc.analisis.domain.vo.CondicionesPrevias;
+import org.onions.laboratorio.msvc.analisis.domain.vo.MedioBiologico;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
