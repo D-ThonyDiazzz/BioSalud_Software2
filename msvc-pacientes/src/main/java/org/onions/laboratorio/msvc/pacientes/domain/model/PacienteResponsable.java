@@ -1,6 +1,6 @@
 package org.onions.laboratorio.msvc.pacientes.domain.model;
 
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.Autorizacion;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.Autorizacion;
 
 /** Entidad hija del agregado Paciente; referencia al Responsable solo por identificador. */
 public class PacienteResponsable {

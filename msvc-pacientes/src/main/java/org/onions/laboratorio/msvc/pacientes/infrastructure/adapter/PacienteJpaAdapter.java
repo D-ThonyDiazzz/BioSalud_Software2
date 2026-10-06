@@ -4,11 +4,11 @@ import org.onions.laboratorio.msvc.pacientes.application.port.PacienteRepository
 import org.onions.laboratorio.msvc.pacientes.application.port.PacienteResponsableRepositoryPort;
 import org.onions.laboratorio.msvc.pacientes.domain.model.Paciente;
 import org.onions.laboratorio.msvc.pacientes.domain.model.PacienteResponsable;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.Autorizacion;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.CorreoElectronico;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.Direccion;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.DocumentoIdentidad;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.Telefono;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.Autorizacion;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.CorreoElectronico;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.Direccion;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.DocumentoIdentidad;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.Telefono;
 import org.onions.laboratorio.msvc.pacientes.infrastructure.entity.AutorizacionEmbeddable;
 import org.onions.laboratorio.msvc.pacientes.infrastructure.entity.CorreoElectronicoEmbeddable;
 import org.onions.laboratorio.msvc.pacientes.infrastructure.entity.DireccionEmbeddable;

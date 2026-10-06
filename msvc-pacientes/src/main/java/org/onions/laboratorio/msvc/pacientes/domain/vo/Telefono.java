@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.pacientes.domain.model.vo;
+package org.onions.laboratorio.msvc.pacientes.domain.vo;
 
 public class Telefono {
     private String prefijo;

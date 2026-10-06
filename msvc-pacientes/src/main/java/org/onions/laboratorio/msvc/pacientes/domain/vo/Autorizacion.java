@@ -1,4 +1,4 @@
-package org.onions.laboratorio.msvc.pacientes.domain.model.vo;
+package org.onions.laboratorio.msvc.pacientes.domain.vo;
 
 import java.time.LocalDateTime;
 

@@ -6,7 +6,7 @@ import org.onions.laboratorio.msvc.pacientes.application.port.PacienteResponsabl
 import org.onions.laboratorio.msvc.pacientes.application.port.ResponsableClientPort;
 import org.onions.laboratorio.msvc.pacientes.domain.model.Paciente;
 import org.onions.laboratorio.msvc.pacientes.domain.model.PacienteResponsable;
-import org.onions.laboratorio.msvc.pacientes.domain.model.vo.Autorizacion;
+import org.onions.laboratorio.msvc.pacientes.domain.vo.Autorizacion;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
